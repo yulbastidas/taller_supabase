@@ -36,10 +36,24 @@ class RecipeController extends GetxController {
         'ingredients': ingredients,
       });
       fetchRecipes();
-      Get.back(); // cerrar modal
+      Get.back();
       Get.snackbar("Éxito", "Receta agregada correctamente");
     } catch (e) {
       Get.snackbar("Error", "No se pudo guardar la receta");
+    }
+  }
+
+  Future<void> updateRecipe(int id, String name, String ingredients) async {
+    try {
+      await supabase
+          .from('recipes')
+          .update({'name': name, 'ingredients': ingredients})
+          .eq('id', id);
+      fetchRecipes();
+      Get.back();
+      Get.snackbar("Éxito", "Receta actualizada");
+    } catch (e) {
+      Get.snackbar("Error", "No se pudo actualizar la receta");
     }
   }
 

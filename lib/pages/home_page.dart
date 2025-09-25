@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/recipe_controller.dart';
 import 'add_recipe_page.dart';
+import 'edit_recipe_page.dart';
 
 class HomePage extends StatelessWidget {
   final RecipeController controller = Get.put(RecipeController());
@@ -9,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Recetas con Supabase")),
+      appBar: AppBar(title: const Text("📖 Recetas con Supabase")),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -31,9 +32,18 @@ class HomePage extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(recipe.ingredients),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => controller.deleteRecipe(recipe.id!),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () => Get.to(() => EditRecipePage(recipe)),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => controller.deleteRecipe(recipe.id!),
+                    ),
+                  ],
                 ),
               ),
             );

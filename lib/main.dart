@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'pages/home_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// 🔑 Reemplaza con tus credenciales de Supabase
-const supabaseUrl = 'https://TU-PROYECTO.supabase.co';
-const supabaseAnonKey = 'TU-ANON-KEY';
+import 'pages/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
+  // Cargar archivo .env
+  await dotenv.load(fileName: ".env");
 
-  runApp(const MyApp());
+  // Inicializar Supabase con las variables del .env
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
+
+  runApp(MyApp()); // 👈 quitamos el const
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Recetas con Supabase',
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: const HomePage(),
+      title: 'Taller Supabase CRUD',
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: HomePage(),
     );
   }
 }
